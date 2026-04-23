@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테트리스</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>테트리스</h1>
+        <div class="game-wrapper">
+            <div class="game-area">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+            </div>
+            <div class="sidebar">
+                <div class="info-section">
+                    <div class="label">점수</div>
+                    <div class="value" id="score">0</div>
+                </div>
+                <div class="info-section">
+                    <div class="label">레벨</div>
+                    <div class="value" id="level">1</div>
+                </div>
+                <div class="info-section">
+                    <div class="label">라인</div>
+                    <div class="value" id="lines">0</div>
+                </div>
+                <div class="info-section">
+                    <div class="label">다음 조각</div>
+                    <canvas id="nextCanvas" width="120" height="120"></canvas>
+                </div>
+                <div class="controls">
+                    <button id="startBtn" class="btn btn-primary">시작</button>
+                    <button id="pauseBtn" class="btn btn-secondary" disabled>일시 정지</button>
+                </div>
+                <div class="instructions">
+                    <h3>조작법</h3>
+                    <p>← → : 좌우 이동</p>
+                    <p>↑ : 회전</p>
+                    <p>↓ : 빠른 하강</p>
+                    <p>Space : 하드 드롭</p>
+                </div>
+            </div>
+        </div>
+        <div id="gameOverMessage" class="game-over-message hidden">
+            <div class="message-content">
+                <h2>게임 오버!</h2>
+                <p id="finalScore">최종 점수: 0</p>
+                <button id="restartBtn" class="btn btn-primary">다시 시작</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
