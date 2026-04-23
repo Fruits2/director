@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -16,6 +16,7 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
 
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -26,13 +27,15 @@ export default function LoginPage() {
       setLoading(false)
     } else {
       router.push('/')
+      router.refresh()
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">MI 업무 관리 시스템</h1>
+        <h1 className="text-2xl font-bold text-center mb-2">MI 업무 관리 시스템</h1>
+        <p className="text-center text-gray-500 text-sm mb-6">종근당 학술MI파트</p>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
