@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import { getTasks } from "@/lib/store";
 import { teamMembers, products } from "@/lib/mockData";
 import { Task } from "@/lib/types";
@@ -21,10 +23,16 @@ const CATEGORIES = ["검토", "교육", "리뷰", "자료생성"];
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.push('/login')
+      }
+    })
     setTasks(getTasks());
-  }, []);
+  }, [router]);
 
   const today = new Date().toISOString().slice(0, 10);
   const urgent = tasks.filter((t) => t.priority === "긴급" && t.status !== "완료");
