@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ClipboardList, Package, Users, PlusCircle } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Package, Users, PlusCircle, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 const navItems = [
   { href: "/", label: "대시보드", icon: LayoutDashboard },
@@ -14,38 +15,63 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <aside className="w-52 min-h-screen bg-slate-900 text-slate-100 flex flex-col shrink-0">
-      <div className="px-5 py-5 border-b border-slate-700">
-        <p className="text-xs text-slate-400 font-medium uppercase tracking-widest">종근당</p>
-        <h1 className="text-sm font-bold mt-0.5 leading-snug">학술MI 업무<br />대시보드</h1>
+    <>
+      {/* 모바일 상단 헤더 */}
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-900 text-white fixed top-0 left-0 right-0 z-50">
+        <div>
+          <p className="text-xs text-slate-400">종근당</p>
+          <p className="text-sm font-bold">학술MI 업무 대시보드</p>
+        </div>
+        <button onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
-      <nav className="flex-1 py-4">
-        <ul className="space-y-0.5 px-3">
-          {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href || (href !== "/" && pathname.startsWith(href));
-            return (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
-                    active
-                      ? "bg-blue-600 text-white font-medium"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  }`}
-                >
-                  <Icon size={15} />
+
+      {/* 모바일 드로어 메뉴 */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileOpen(false)}>
+          <div className="w-64 h-full bg-slate-900 p-6" onClick={e => e.stopPropagation()}>
+            <nav className="mt-8 space-y-1">
+              {navItems.map(({ href, label, icon: Icon }) => (
+                <Link key={href} href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === href
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:bg-slate-800"
+                  }`}>
+                  <Icon size={18} />
                   {label}
                 </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <div className="px-5 py-4 border-t border-slate-700 text-xs text-slate-500">
-        학술MI파트 · 내부용
-      </div>
-    </aside>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
+
+      {/* PC 사이드바 */}
+      <aside className="hidden md:flex w-56 min-h-screen bg-slate-900 text-white flex-col p-6">
+        <div className="mb-8">
+          <p className="text-xs text-slate-400">종근당</p>
+          <p className="text-sm font-bold leading-tight">학술MI 업무<br />대시보드</p>
+        </div>
+        <nav className="space-y-1">
+          {navItems.map(({ href, label, icon: Icon }) => (
+            <Link key={href} href={href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                pathname === href
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-300 hover:bg-slate-800"
+              }`}>
+              <Icon size={18} />
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </aside>
+    </>
   );
 }
